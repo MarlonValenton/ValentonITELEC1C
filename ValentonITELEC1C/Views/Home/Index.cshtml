@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@{
+    DateTime date = DateTime.Now;
+    var day = DateTime.Now.DayOfWeek;
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome CICS</h1>
+    <p>@date @day</p> 
+    @{
+        if (date.Hour >= 0 && date.Hour < 12) 
+        {
+            <p> It is morning.</p>
+        }
+        else if (date.Hour >=12 && date.Hour <16)
+        {
+            <p>It is afternoon.</p>
+        }
+        else if (date.Hour >=16 && date.Hour <24) 
+        {
+            <p>It is evening.</p>
+        }
+
+        
+    }
+</div>
