@@ -10,15 +10,15 @@ namespace ValentonITELEC1C.Controllers
             {
                 new Instructor()
                 {
-                    Id= 1,FirstName = "Gabriel",LastName = "Montano", Rank = Rank.Professor, HiringDate = DateTime.Parse("2022-08-26"), Email = "ghaby021@gmail.com", IsTenured = "Permanent"
+                    Id= 1,FirstName = "Gabriel",LastName = "Montano", Rank = Rank.Professor, HiringDate = DateTime.Parse("2022-08-26"), Email = "ghaby021@gmail.com", IsTenured = "Yes"
                 },
                 new Instructor()
                 {
-                    Id= 2,FirstName = "Zyx",LastName = "Montano", Rank = Rank.AssociateProfessor, HiringDate = DateTime.Parse("2022-08-07"), Email = "zyx@gmail.com", IsTenured = "Probationary"
+                    Id= 2,FirstName = "Zyx",LastName = "Montano", Rank = Rank.AssociateProfessor, HiringDate = DateTime.Parse("2022-08-07"), Email = "zyx@gmail.com", IsTenured = "No"
                 },
                 new Instructor()
                 {
-                    Id= 3,FirstName = "Aerdriel",LastName = "Montano", Rank = Rank.Instructor,  HiringDate = DateTime.Parse("2020-01-25"), Email = "aerdriel@gmail.com", IsTenured = "Permanent"
+                    Id= 3,FirstName = "Aerdriel",LastName = "Montano", Rank = Rank.Instructor,  HiringDate = DateTime.Parse("2020-01-25"), Email = "aerdriel@gmail.com", IsTenured = "Yes"
                 }
             };
         public IActionResult Index()

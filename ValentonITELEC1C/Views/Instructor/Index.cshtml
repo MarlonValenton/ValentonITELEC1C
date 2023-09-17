@@ -37,7 +37,17 @@
             <td>@instructor.Rank</td>
             <td>@instructor.HiringDate</td>
             <td>@instructor.Email</td>
-            <td>@instructor.IsTenured</td>
+            @{
+                if (instructor.IsTenured == "Yes")
+                {
+                    <td>Permanent</td>
+                }else if(instructor.IsTenured =="No")
+                {
+                    <td>Probationary</td>
+                }
+
+            }
+            
             <td><a asp-action="ShowDetail" asp-route-id="@instructor.Id">Show Details</a></td>
 
         </tr>
