@@ -1,36 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ValentonITELEC1C.Models;
+using ValentonITELEC1C.Services;
 
 
 namespace ValentonITELEC1C.Controllers
 {
     public class InstructorController : Controller
     {
-        List<Instructor> InstructorList = new List<Instructor>
-            {
-                new Instructor()
-                {
-                    Id= 1,FirstName = "Gabriel",LastName = "Montano", Rank = Rank.Professor, HiringDate = DateTime.Parse("2022-08-26"), Email = "ghaby021@gmail.com", IsTenured = IsTenured.Permanent
-                },
-                new Instructor()
-                {
-                    Id= 2,FirstName = "Zyx",LastName = "Montano", Rank = Rank.AssociateProfessor, HiringDate = DateTime.Parse("2022-08-07"), Email = "zyx@gmail.com", IsTenured = IsTenured.Probationary
-                },
-                new Instructor()
-                {
-                    Id= 3,FirstName = "Aerdriel",LastName = "Montano", Rank = Rank.Instructor,  HiringDate = DateTime.Parse("2020-01-25"), Email = "aerdriel@gmail.com", IsTenured = IsTenured.Permanent
-                }
-            };
+       private readonly IMyFakeDataService _fakeData;
+
+        public InstructorController(IMyFakeDataService fakeData)
+        {
+            _fakeData = fakeData;
+        }
+        
         public IActionResult Index()
         {
 
-            return View(InstructorList);
+            return View(_fakeData.InstructorList);
         }
+
 
         public IActionResult ShowDetail(int id)
         {
             //Search for the student whose id matches the given id
-            Instructor? instructor = InstructorList.FirstOrDefault(ins => ins.Id == id);
+            Instructor? instructor = _fakeData.InstructorList.FirstOrDefault(ins => ins.Id == id);
 
             if (instructor != null)//was an student found?
                 return View(instructor);
@@ -45,13 +39,13 @@ namespace ValentonITELEC1C.Controllers
         [HttpPost]
         public IActionResult AddInstructor(Instructor newInstructor)
         {
-            InstructorList.Add(newInstructor);
-            return View("Index", InstructorList);
+            _fakeData.InstructorList.Add(newInstructor);
+            return View("Index", _fakeData.InstructorList);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Instructor? instructor = InstructorList.FirstOrDefault(st => st.Id == id);
+            Instructor? instructor = _fakeData.InstructorList.FirstOrDefault(st => st.Id == id);
 
             if (instructor != null)
                 return View(instructor);
@@ -61,7 +55,7 @@ namespace ValentonITELEC1C.Controllers
         [HttpPost]
         public IActionResult Edit(Instructor instructorChange)
         {
-            Instructor? instructor = InstructorList.FirstOrDefault(st => st.Id == instructorChange.Id);
+            Instructor? instructor = _fakeData.InstructorList.FirstOrDefault(st => st.Id == instructorChange.Id);
             if (instructor != null)
             {
                
@@ -73,8 +67,33 @@ namespace ValentonITELEC1C.Controllers
                 instructor.HiringDate = instructorChange.HiringDate;
 
             }
-            return View("Index", InstructorList);
+            return View("Index", _fakeData.InstructorList);
         }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            Instructor? instructor = _fakeData.InstructorList.FirstOrDefault(st => st.Id == id);
+
+            if (instructor != null)
+                return View(instructor);
+
+            return NotFound();
+        }
+
+        [HttpPost]
+
+        public IActionResult Delete(Instructor deleteInstructor, int id)
+        {
+            Instructor? instructor = _fakeData.InstructorList.FirstOrDefault(st => st.Id == id);
+
+            if (instructor != null)
+            {
+                _fakeData.InstructorList.Remove(instructor);
+            }
+            return View("Index", _fakeData.InstructorList);
+        }
+
     }
 
 
