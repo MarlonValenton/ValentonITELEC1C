@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ValentonITELEC1C.Data;
 using ValentonITELEC1C.Models;
 using ValentonITELEC1C.Services;
 
@@ -6,23 +7,23 @@ namespace ValentonITELEC1C.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly IMyFakeDataService _fakeData;
+        private readonly AppDbContext _dbContext;
 
-        public StudentController(IMyFakeDataService fakeData)
+        public StudentController(AppDbContext dbContext)
         {
-            _fakeData = fakeData;
+            _dbContext = dbContext;
         }
         
         public IActionResult Index()
         {
 
-            return View(_fakeData.StudentList);
+            return View(_dbContext.Students);
         }
 
         public IActionResult ShowDetail(int id)
         {
             //Search for the student whose id matches the given id
-            Student? student = _fakeData.StudentList.FirstOrDefault(st => st.Id == id);
+            Student? student = _dbContext.Students.FirstOrDefault(st => st.Id == id);
 
             if (student != null)//was an student found?
                 return View(student);
@@ -37,13 +38,14 @@ namespace ValentonITELEC1C.Controllers
         [HttpPost]
         public IActionResult AddStudent(Student newStudent)
         {
-            _fakeData.StudentList.Add(newStudent);
-            return RedirectToAction("Index", _fakeData.StudentList);
+            _dbContext.Students.Add(newStudent);
+            _dbContext.SaveChanges();
+            return RedirectToAction("Index", _dbContext.Students);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Student? student = _fakeData.StudentList.FirstOrDefault(st => st.Id == id);
+            Student? student = _dbContext.Students.FirstOrDefault(st => st.Id == id);
 
             if (student != null)
                 return View(student);
@@ -53,7 +55,7 @@ namespace ValentonITELEC1C.Controllers
         [HttpPost]
         public IActionResult Edit(Student studentChange)
         {
-            Student? student = _fakeData.StudentList.FirstOrDefault(st => st.Id == studentChange.Id);
+            Student? student = _dbContext.Students.FirstOrDefault(st => st.Id == studentChange.Id);
             if (student != null)
             {
                 student.Id = studentChange.Id;
@@ -63,15 +65,16 @@ namespace ValentonITELEC1C.Controllers
                 student.GPA = studentChange.GPA;
                 student.Email = studentChange.Email;
                 student.DateEnrolled = studentChange.DateEnrolled;
-         
+                _dbContext.SaveChanges();
+
             }
-            return View("Index", _fakeData.StudentList);
+            return View("Index", _dbContext.Students);
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            Student? student = _fakeData.StudentList.FirstOrDefault(st => st.Id == id);
+            Student? student = _dbContext.Students.FirstOrDefault(st => st.Id == id);
 
             if (student != null)
                 return View(student);
@@ -83,13 +86,15 @@ namespace ValentonITELEC1C.Controllers
 
         public IActionResult Delete(Student deleteStudent, int id)
         {
-            Student? student = _fakeData.StudentList.FirstOrDefault(st => st.Id == id);
+            Student? student = _dbContext.Students.FirstOrDefault(st => st.Id == id);
 
             if (student != null)
             {
-                _fakeData.StudentList.Remove(student);
+                _dbContext.Students.Remove(student);
+                _dbContext.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return View("Index", _fakeData.StudentList);
+            return NotFound();
         }
 
 
